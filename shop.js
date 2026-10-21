@@ -3,6 +3,7 @@
   const G = window.GLORY, Api = window.Api, fmt = window.fmt, CAT = window.CATALOG;
   const $ = (s) => document.querySelector(s);
   const MAX_QTY = 10;
+  const SHIP = "expedition";                       // valeur du choix « autre ville »
 
   const find = (id) => CAT.find((p) => p.id === id);
   const colorOf = (id, name) => find(id).colors.find((c) => c.name === name);
@@ -13,8 +14,13 @@
   const save = () => { Api.write("gh_cart", cart); render(); };
   const count = () => cart.reduce((n, l) => n + l.q, 0);
   const subtotal = () => cart.reduce((s, l) => s + find(l.p).price * l.q, 0);
-  const delivery = () => G.deliveryFee || 0;
   const available = (p, c) => (stock && stock[p] && c in stock[p] ? stock[p][c] : Infinity);
+
+  // Livraison : frais de la commune choisie, null tant qu'elle n'est pas connue ou en cas d'expédition
+  const zones = G.delivery.zones;
+  const zoneValue = () => ($("#zone") ? $("#zone").value : "");
+  const fee = () => { const z = zones.find((x) => x.name === zoneValue()); return z ? z.fee : null; };
+  const minFee = Math.min(...zones.map((z) => z.fee)), maxFee = Math.max(...zones.map((z) => z.fee));
 
   // ---------- Toast ----------
   let toastTimer;
@@ -88,9 +94,8 @@
     $("#cartEmpty").hidden = n > 0;
     $("#cartFoot").hidden = n === 0;
     $("#cartSub").textContent = fmt(subtotal());
-    $("#cartDelivery").textContent = delivery() ? fmt(delivery()) : "À confirmer";
-    $("#cartTotal").textContent = fmt(subtotal() + delivery());
-    if ($("#checkout").open) renderSummary();
+    $("#cartDelivery").textContent = `${fmt(minFee)} à ${fmt(maxFee)} selon la commune`;
+    if ($("#checkout").open) updateTotals();
   }
 
   // ---------- Fiche produit : quantité, ajout, stock ----------
@@ -115,13 +120,14 @@
     btn.disabled = n <= 0;
     btn.textContent = n <= 0 ? "Épuisé" : "Ajouter au panier";
     note.hidden = !(n <= 5 && n !== Infinity);
-    note.textContent = n <= 0 ? "Ce coloris est momentanément épuisé. Écrivez-nous pour être prévenue du retour." : `Plus que ${n} en stock`;
+    note.textContent = n <= 0 ? "Ce coloris est momentanément épuisé. Écrivez-nous pour être prévue du retour." : `Plus que ${n} en stock`;
     setQtyUi(1);
   }
 
   // ---------- Commande ----------
   const dlg = $("#checkout");
-  function renderSummary() {
+
+  function updateTotals() {
     const ul = $("#sumList");
     ul.innerHTML = "";
     cart.forEach((l) => {
@@ -131,18 +137,22 @@
       li.querySelector("b").textContent = fmt(find(l.p).price * l.q);
       ul.append(li);
     });
-    $("#sumSub").textContent = fmt(subtotal());
-    $("#sumDelivery").textContent = delivery() ? fmt(delivery()) : "À confirmer";
-    $("#sumTotal").textContent = fmt(subtotal() + delivery());
+    const z = zoneValue(), f = fee(), sub = subtotal();
+    $("#sumSub").textContent = fmt(sub);
+    $("#sumDelivery").textContent = f !== null ? fmt(f) : z === SHIP ? "À confirmer (expédition)" : "Choisissez votre commune";
+    $("#sumTotal").textContent = f !== null ? fmt(sub + f) : `${fmt(sub)} + livraison`;
+    $("#cityWrap").hidden = z !== SHIP;
+    $("#cityIn").required = z === SHIP;
   }
+
   function openCheckout() {
     if (!cart.length) return;
     closeCart();
     $("#orderForm").hidden = false;
     $("#done").hidden = true;
     $("#formError").hidden = true;
-    renderSummary();
-    dlg.showModal();
+    updateTotals();
+    if (!dlg.open) dlg.showModal();
   }
 
   function paymentsUi() {
@@ -160,14 +170,30 @@
     });
   }
 
-  function whatsappMessage(num, f, order) {
+  function zonesUi() {
+    const sel = $("#zone");
+    zones.forEach((z) => {
+      const o = document.createElement("option");
+      o.value = z.name;
+      o.textContent = `${z.name} · ${fmt(z.fee)}`;
+      sel.append(o);
+    });
+    const o = document.createElement("option");
+    o.value = SHIP;
+    o.textContent = G.delivery.shippingLabel;
+    sel.append(o);
+    sel.addEventListener("change", updateTotals);
+  }
+
+  function whatsappMessage(num, f, order, res) {
     const lines = cart.map((l) => `• ${l.q} × ${find(l.p).short} (${l.c}) — ${fmt(find(l.p).price * l.q)}`);
     const pay = G.payments.find((m) => m.id === order.payment).label;
+    const ship = order.customer.zone === SHIP;
     return [
       `Bonjour Glory Home, voici ma commande ${num}.`, "", ...lines, "",
-      `Total : ${fmt(subtotal() + delivery())}${delivery() ? "" : " (livraison à confirmer)"}`,
+      ship ? `Total articles : ${fmt(res.total)} (frais d'expédition à confirmer)` : `Livraison : ${fmt(res.delivery)} · Total : ${fmt(res.total)}`,
       `Paiement : ${pay}`, "",
-      `Nom : ${f.name}`, `Téléphone : ${f.phone}`, `Ville : ${f.city}`, `Adresse : ${f.address}`,
+      `Nom : ${f.name}`, `Téléphone : ${f.phone}`, `Commune : ${ship ? "Expédition – " + f.city : f.zone}`, `Adresse : ${f.address}`,
       f.notes ? `Précisions : ${f.notes}` : "",
     ].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n");
   }
@@ -177,7 +203,7 @@
     if (sending || !cart.length) return;
     const fd = new FormData(e.target);
     if (fd.get("website")) return; // champ piège anti-robots
-    const f = Object.fromEntries(["name", "phone", "email", "city", "address", "notes"].map((k) => [k, String(fd.get(k) || "").trim()]));
+    const f = Object.fromEntries(["name", "phone", "email", "zone", "city", "address", "notes"].map((k) => [k, String(fd.get(k) || "").trim()]));
     const err = $("#formError");
     err.hidden = true;
     if (Api.digits(f.phone).length < 8 || Api.digits(f.phone).length > 15) {
@@ -185,6 +211,7 @@
       err.hidden = false;
       return;
     }
+    if (f.zone !== SHIP) f.city = f.zone;
     const order = { customer: f, payment: fd.get("payment"), items: cart.map(({ p, c, q }) => ({ p, c, q })) };
     sending = true;
     const btn = $("#submitOrder");
@@ -192,9 +219,9 @@
     btn.textContent = "Envoi en cours…";
     try {
       const res = await Api.createOrder(order);
-      const msg = whatsappMessage(res.number, f, order);
+      const msg = whatsappMessage(res.number, f, order, res);
       $("#doneNum").textContent = res.number;
-      $("#doneTotal").textContent = fmt(res.total);
+      $("#doneTotal").textContent = f.zone === SHIP ? `${fmt(res.total)} + frais d'expédition` : fmt(res.total);
       $("#doneWa").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent(msg)}`;
       $("#orderForm").hidden = true;
       $("#done").hidden = false;
@@ -243,7 +270,7 @@
     name: String(fd.get("name")).trim(), contact: String(fd.get("contact")).trim(), message: String(fd.get("message")).trim(),
   }), "Message envoyé. Nous vous répondons très vite.");
 
-  // ---------- Liens ----------
+  // ---------- Liens et coordonnées ----------
   $("#cartBtn").addEventListener("click", openCart);
   $("#cartClose").addEventListener("click", closeCart);
   $("#overlay").addEventListener("click", closeCart);
@@ -253,12 +280,12 @@
   $("#mail").href = `mailto:${G.email}`;
   document.querySelectorAll("[data-phone]").forEach((a) => { a.href = `https://wa.me/${G.whatsapp}`; a.target = "_blank"; a.rel = "noopener"; a.textContent = G.phoneDisplay; });
   document.querySelectorAll("[data-mail]").forEach((a) => { a.href = `mailto:${G.email}`; a.textContent = G.email; });
-  $("#waFloat").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent("Bonjour Glory Home, j'ai une question.")}`;
   $("#waNews").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent("Bonjour Glory Home, je souhaite être informée de vos prochains arrivages.")}`;
   $("#coNote").textContent = G.deliveryNote;
   if (G.instagram) $("#insta").href = G.instagram; else $("#insta").hidden = true;
 
   paymentsUi();
+  zonesUi();
   render();
   window.Shop = { add, openCart, updateStock };
   Api.stock().then((s) => { stock = s; updateStock(); render(); }).catch(() => { /* stock non disponible : on n'empêche pas la vente */ });

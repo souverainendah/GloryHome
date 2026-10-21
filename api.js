@@ -50,16 +50,18 @@
         return { product_id: i.p, product_name: p.short, color: i.c, qty: i.q, unit_price: p.price };
       });
       const subtotal = items.reduce((s, i) => s + i.unit_price * i.qty, 0);
+      const z = G.delivery.zones.find((x) => x.name === order.customer.zone);
+      const dfee = z ? z.fee : 0, ship = order.customer.zone === "expedition";
       const rec = {
         number: localNumber(), status: "nouvelle", created_at: new Date().toISOString(),
         customer_name: order.customer.name, phone: order.customer.phone, email: order.customer.email || "",
-        city: order.customer.city, address: order.customer.address, notes: order.customer.notes || "",
-        payment: order.payment, subtotal, delivery: G.deliveryFee || 0, total: subtotal + (G.deliveryFee || 0), items,
+        city: ship ? "Expédition : " + order.customer.city : order.customer.zone, address: order.customer.address, notes: order.customer.notes || "",
+        payment: order.payment, subtotal, delivery: dfee, total: subtotal + dfee, items,
       };
       const all = read("gh_demo_orders", []);
       all.unshift(rec);
       write("gh_demo_orders", all);
-      return { number: rec.number, total: rec.total };
+      return { number: rec.number, total: rec.total, delivery: dfee };
     },
 
     async trackOrder(number, phone) {

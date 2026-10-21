@@ -56,7 +56,6 @@
 
       <div class="slides">
         <article class="slide is-active" data-model="eclat" aria-label="Sac Éclat">
-          <span class="s-ghost" aria-hidden="true">Éclat</span>
           <div class="s-copy">
             <p class="eyebrow">N° 01 · Nouvel arrivage</p>
             <h2>Le sac <em class="name">« Éclat »</em></h2>
@@ -64,14 +63,15 @@
             <div class="s-row"><span class="price-tag" data-price="eclat"></span><a class="btn" href="#sac" data-go="eclat">Découvrir</a></div>
           </div>
           <div class="s-art">
-            <span class="halo"></span>
+            <span class="orb" aria-hidden="true"></span>
+            <i class="sparkle sp1" aria-hidden="true">✦</i><i class="sparkle sp2" aria-hidden="true">✦</i><i class="sparkle sp3" aria-hidden="true">✦</i>
+            <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true"><circle class="stk-bg" cx="60" cy="60" r="57"/><defs><path id="stk1" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><g class="ring-spin"><text><textPath href="#stk1" textLength="274" lengthAdjust="spacing">NOUVEL ARRIVAGE ✦ GLORY HOME ✦ </textPath></text></g><text class="stk-n" x="60" y="69" text-anchor="middle">01</text></svg>
             <img src="images/hero-eclat.png" alt="Sac Éclat noir, finition vernie effet croco" fetchpriority="high">
             <span class="floor"></span>
           </div>
         </article>
 
         <article class="slide" data-model="t" aria-label="Sac T">
-          <span class="s-ghost" aria-hidden="true">T</span>
           <div class="s-copy">
             <p class="eyebrow">N° 02 · Nouvel arrivage</p>
             <h2>Le sac <em class="name">« T »</em></h2>
@@ -79,7 +79,9 @@
             <div class="s-row"><span class="price-tag" data-price="t"></span><a class="btn" href="#sac" data-go="t">Découvrir</a></div>
           </div>
           <div class="s-art">
-            <span class="halo"></span>
+            <span class="orb" aria-hidden="true"></span>
+            <i class="sparkle sp1" aria-hidden="true">✦</i><i class="sparkle sp2" aria-hidden="true">✦</i><i class="sparkle sp3" aria-hidden="true">✦</i>
+            <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true"><circle class="stk-bg" cx="60" cy="60" r="57"/><defs><path id="stk2" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><g class="ring-spin"><text><textPath href="#stk2" textLength="274" lengthAdjust="spacing">NOUVEL ARRIVAGE ✦ GLORY HOME ✦ </textPath></text></g><text class="stk-n" x="60" y="69" text-anchor="middle">02</text></svg>
             <img src="images/hero-t.png" alt="Sac T chocolat, fermoir argenté" fetchpriority="high">
             <span class="floor"></span>
           </div>
@@ -145,7 +147,7 @@
           <a class="btn ghost btn-block wa-ico" id="order" href="#" target="_blank" rel="noopener">Commander directement sur WhatsApp</a>
           <ul class="trust">
             <li>Paiement à la livraison, rien à payer en ligne</li>
-            <li>Livraison confirmée par message</li>
+            <li>Livraison à Abidjan dès 1 500 F</li>
             <li>Service client sur WhatsApp</li>
           </ul>
         </div>
@@ -210,7 +212,7 @@
       <div class="faq-list reveal">
         <details><summary>Comment passer commande ?</summary><p>Ajoutez le sac et le coloris de votre choix au panier, puis laissez votre nom, votre téléphone et votre adresse. Aucun compte à créer. Nous vous appelons pour confirmer la commande avant la livraison. Vous pouvez aussi commander directement par message WhatsApp depuis chaque fiche produit.</p></details>
         <details><summary>Quels sont les moyens de paiement ?</summary><p>Le paiement se fait à la livraison, à la réception de votre commande. Rien n'est à payer en ligne.</p></details>
-        <details><summary>Quels sont les délais et frais de livraison ?</summary><p>Ils dépendent de votre ville. Nous vous les confirmons par message avant l'expédition, pour que vous sachiez exactement ce que vous payez.</p></details>
+        <details><summary>Quels sont les délais et frais de livraison ?</summary><p>À Abidjan : 1 500 F pour Abatta, Bingerville, Faya, Angré et Cocody ; 2 000 F pour Koumassi, Port-Bouët, Yopougon, Abobo, Marcory et Treichville. Les expéditions hors d'Abidjan sont possibles : les frais vous sont confirmés par téléphone. Nous vous appelons aussi pour confirmer le délai.</p></details>
         <details><summary>Les couleurs sont-elles fidèles aux photos ?</summary><p>Nous photographions chaque coloris avec soin. De légères différences peuvent exister selon l'écran. En cas de doute, écrivez-nous : nous vous répondons rapidement.</p></details>
         <details><summary>Que faire si mon article ne convient pas ou présente un défaut ?</summary><p>Contactez-nous le plus tôt possible sur WhatsApp avec une photo : nous cherchons une solution avec vous. Les conditions complètes figurent dans les <a href="livraison-retours.html">conditions de livraison et de retour</a>.</p></details>
       </div>
@@ -287,8 +289,8 @@
       <dl class="totals">
         <div><dt>Sous-total</dt><dd id="cartSub"></dd></div>
         <div><dt>Livraison</dt><dd id="cartDelivery"></dd></div>
-        <div class="grand"><dt>Total</dt><dd id="cartTotal"></dd></div>
       </dl>
+      <p class="cart-note">Les frais exacts sont calculés à l'étape suivante, selon votre commune.</p>
       <button class="btn btn-block" id="goCheckout" type="button">Passer la commande</button>
     </div>
   </aside>
@@ -305,7 +307,8 @@
           <label>Email (facultatif)<input name="email" type="email" maxlength="120" autocomplete="email"></label>
         </fieldset>
         <fieldset><legend>Livraison</legend>
-          <label>Ville<input name="city" required maxlength="80" autocomplete="address-level2"></label>
+          <label>Commune de livraison<select name="zone" id="zone" required><option value="" disabled selected>Choisissez votre commune</option></select></label>
+          <label id="cityWrap" hidden>Ville de destination (expédition)<input id="cityIn" name="city" maxlength="80" autocomplete="address-level2"></label>
           <label>Quartier et adresse<input name="address" required maxlength="200" autocomplete="street-address"></label>
           <label>Précisions pour le livreur (facultatif)<textarea name="notes" rows="2" maxlength="300"></textarea></label>
         </fieldset>
@@ -339,8 +342,6 @@
       <button class="link-btn" id="doneClose" type="button">Fermer</button>
     </div>
   </dialog>
-
-  <a class="wa-float wa-ico" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Écrire à Glory Home sur WhatsApp"></a>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
