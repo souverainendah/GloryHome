@@ -74,7 +74,7 @@
       const items = (o.items || []).map((i) => `${esc(i.qty)} × ${esc(i.product_name)} (${esc(i.color)})`).join("<br>");
       const opts = Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${k === o.status ? "selected" : ""}>${v}</option>`).join("");
       return `<tr><td><span class="num">${esc(o.number)}</span><br><span class="muted">${esc(new Date(o.created_at).toLocaleString("fr-FR"))}</span></td>
-        <td><b>${esc(o.customer_name)}</b><br><a href="${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><br><span class="muted">${esc(o.city)} · ${esc(o.address)}</span>${o.notes ? `<br><span class="muted">« ${esc(o.notes)} »</span>` : ""}</td>
+        <td><b>${esc(o.customer_name)}</b><br><a href="tel:${esc(o.phone.replace(/[^+\d]/g, ''))}">${esc(o.phone)}</a> · <a href="${wa}" target="_blank" rel="noopener">WhatsApp</a><br><span class="muted">${esc(o.city)} · ${esc(o.address)}</span>${o.notes ? `<br><span class="muted">« ${esc(o.notes)} »</span>` : ""}</td>
         <td>${items}</td><td><b>${fmt(o.total)}</b></td><td>${esc(PAY[o.payment] || o.payment)}</td>
         <td><span class="pill ${o.status}">${STATUS[o.status]}</span><br><select data-n="${esc(o.number)}" aria-label="Changer le statut">${opts}</select></td></tr>`;
     }).join("") : `<tr><td colspan="6" class="empty-row">Aucune commande.</td></tr>`;
