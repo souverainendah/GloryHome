@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="style.css">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
-    {"@type":"Store","name":"Glory Home","description":"Vêtements & accessoires féminins","image":"https://www.gloryhome.example/images/logo-mark-160.png","url":"https://www.gloryhome.example/","priceRange":"15 000 F – 20 000 F"},
+    {"@type":"Store","name":"Glory Home","description":"Vêtements & accessoires féminins","image":"https://www.gloryhome.example/images/logo-mark-160.png","url":"https://www.gloryhome.example/","priceRange":"15 000 F – 20 000 F","telephone":"+2250153052985","email":"gloryhome89@gmail.com"},
     {"@type":"Product","name":"Sac « Éclat »","image":"https://www.gloryhome.example/images/eclat-noir.jpg","description":"Sac structuré, finition vernie effet croco, breloque trèfle dorée, bandoulière amovible.","brand":{"@type":"Brand","name":"Glory Home"},"offers":{"@type":"Offer","priceCurrency":"XOF","price":"20000","availability":"https://schema.org/InStock","url":"https://www.gloryhome.example/#sac"}},
     {"@type":"Product","name":"Sac « T »","image":"https://www.gloryhome.example/images/sac-chocolat.jpg","description":"Sac à rabat, finition grainée, fermoir « T » argenté.","brand":{"@type":"Brand","name":"Glory Home"},"offers":{"@type":"Offer","priceCurrency":"XOF","price":"15000","availability":"https://schema.org/InStock","url":"https://www.gloryhome.example/#sac"}}
   ]}
@@ -223,7 +223,14 @@
         <h2>Écrivez-<em>nous</em></h2>
       </header>
       <div class="contact-grid">
-        <p class="contact-intro reveal">Une question sur un modèle, un coloris, une livraison ? Laissez-nous un message, nous vous répondons rapidement. Pour une réponse immédiate, utilisez WhatsApp.</p>
+        <div class="contact-side reveal">
+          <p class="contact-intro">Une question sur un modèle, un coloris, une livraison ? Écrivez-nous ou appelez-nous : nous répondons rapidement. Pour connaître nos prochains arrivages, utilisez WhatsApp.</p>
+          <ul class="contact-list">
+            <li><span>WhatsApp et appel</span><a data-phone href="#"></a></li>
+            <li><span>Email</span><a data-mail href="#"></a></li>
+          </ul>
+          <a class="btn" id="waNews" href="#" target="_blank" rel="noopener">Être informée des nouveaux arrivages</a>
+        </div>
         <form class="form reveal" id="contactForm">
           <label>Votre nom<input name="name" required maxlength="80" autocomplete="name"></label>
           <label>Téléphone ou email<input name="contact" required maxlength="120" autocomplete="email"></label>
@@ -241,6 +248,7 @@
       <div class="foot-brand">
         <img class="footer-mark" src="images/logo-mark-160.png" alt="">
         <p>Glory Home<br>Vêtements &amp; accessoires féminins</p>
+        <p class="foot-contact"><a data-phone href="#"></a><br><a data-mail href="#"></a></p>
       </div>
       <nav class="foot-col" aria-label="Boutique">
         <h4>Boutique</h4>
@@ -331,6 +339,10 @@
       <button class="link-btn" id="doneClose" type="button">Fermer</button>
     </div>
   </dialog>
+
+  <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Écrire à Glory Home sur WhatsApp">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.7 7.1L4 20l1.4-4.1A8 8 0 1 1 20 11.5Z"/><path d="M9.2 8.9c.2 2.6 2.4 4.9 5 5.2l1.1-1.3-1.9-1-.8.6a3.6 3.6 0 0 1-1.6-1.6l.6-.8-1-1.9-1.4 1Z" fill="currentColor" stroke="none"/></svg>
+  </a>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

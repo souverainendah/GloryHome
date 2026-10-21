@@ -251,6 +251,10 @@
   $("#keepShopping").addEventListener("click", closeCart);
   addEventListener("keydown", (e) => { if (e.key === "Escape" && $("#cart").classList.contains("open")) closeCart(); });
   $("#mail").href = `mailto:${G.email}`;
+  document.querySelectorAll("[data-phone]").forEach((a) => { a.href = `https://wa.me/${G.whatsapp}`; a.target = "_blank"; a.rel = "noopener"; a.textContent = G.phoneDisplay; });
+  document.querySelectorAll("[data-mail]").forEach((a) => { a.href = `mailto:${G.email}`; a.textContent = G.email; });
+  $("#waFloat").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent("Bonjour Glory Home, j'ai une question.")}`;
+  $("#waNews").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent("Bonjour Glory Home, je souhaite être informée de vos prochains arrivages.")}`;
   $("#coNote").textContent = G.deliveryNote;
   if (G.instagram) $("#insta").href = G.instagram; else $("#insta").hidden = true;
 

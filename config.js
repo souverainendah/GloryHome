@@ -1,7 +1,8 @@
 // Réglages de la boutique : à modifier ici, sans toucher au reste du code.
 window.GLORY = {
-  whatsapp: "00000000000",              // format international sans "+" (ex. 2250700000000)
-  email: "contact@gloryhome.example",
+  whatsapp: "2250153052985",            // format international sans "+"
+  phoneDisplay: "+225 01 53 05 29 85",
+  email: "gloryhome89@gmail.com",
   instagram: "",                        // lien complet du compte Instagram
   // Supabase : laisser vide = mode démo (commandes enregistrées seulement dans ce navigateur)
   supabase: { url: "", anonKey: "" },
