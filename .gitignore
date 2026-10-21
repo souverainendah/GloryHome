@@ -1,0 +1,7 @@
+# Originaux volumineux et fichiers locaux
+images/logo-original.jpg
+images/logo-monogram.png
+.DS_Store
+Thumbs.db
+.env
+CLAUDE.md

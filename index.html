@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glory Home – Vêtements &amp; accessoires féminins</title>
+  <meta name="description" content="Glory Home : maison de mode féminine. Sacs « Éclat » (20 000 F) et « T » (15 000 F), 10 coloris. Commande en ligne, paiement à la livraison ou Mobile Money.">
+  <meta name="theme-color" content="#faf7f4">
+  <link rel="canonical" href="https://www.gloryhome.example/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Glory Home">
+  <meta property="og:title" content="Glory Home – Vêtements &amp; accessoires féminins">
+  <meta property="og:description" content="Sacs « Éclat » et « T » : deux modèles signature, dix coloris. Commandez en ligne.">
+  <meta property="og:image" content="https://www.gloryhome.example/images/trio-lifestyle.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="images/logo-mark-160.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[
+    {"@type":"Store","name":"Glory Home","description":"Vêtements & accessoires féminins","image":"https://www.gloryhome.example/images/logo-mark-160.png","url":"https://www.gloryhome.example/","priceRange":"15 000 F – 20 000 F"},
+    {"@type":"Product","name":"Sac « Éclat »","image":"https://www.gloryhome.example/images/eclat-noir.jpg","description":"Sac structuré, finition vernie effet croco, breloque trèfle dorée, bandoulière amovible.","brand":{"@type":"Brand","name":"Glory Home"},"offers":{"@type":"Offer","priceCurrency":"XOF","price":"20000","availability":"https://schema.org/InStock","url":"https://www.gloryhome.example/#sac"}},
+    {"@type":"Product","name":"Sac « T »","image":"https://www.gloryhome.example/images/sac-chocolat.jpg","description":"Sac à rabat, finition grainée, fermoir « T » argenté.","brand":{"@type":"Brand","name":"Glory Home"},"offers":{"@type":"Offer","priceCurrency":"XOF","price":"15000","availability":"https://schema.org/InStock","url":"https://www.gloryhome.example/#sac"}}
+  ]}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#sac">Aller à la boutique</a>
+
+  <header class="header" id="header">
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+    <nav class="nav" id="nav">
+      <a href="#sac">La boutique</a>
+      <a href="#savoir-faire">Savoir-faire</a>
+      <a href="#faq">Aide</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#top" class="brand" aria-label="Glory Home – accueil"><img src="images/logo-mark-160.png" alt=""><span>GLORY&nbsp;HOME</span></a>
+    <div class="hr">
+      <a href="suivi.html" class="header-cta">Suivre ma commande</a>
+      <button class="cart-btn" id="cartBtn" aria-label="Ouvrir le panier">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO : bannière qui circule entre les deux modèles -->
+    <section class="hero" id="hero" aria-roledescription="carrousel" aria-label="Nos deux modèles">
+      <h1 class="sr">Glory Home, vêtements et accessoires féminins</h1>
+      <p class="arrival"><span class="dot" aria-hidden="true"></span>Nouvel arrivage<span class="arrival-more"> · d'autres pièces arrivent bientôt</span></p>
+      <div class="hero-bg" aria-hidden="true"><i class="bloom b1"></i><i class="bloom b2"></i><div class="motes" id="motes"></div></div>
+
+      <div class="slides">
+        <article class="slide is-active" data-model="eclat" aria-label="Sac Éclat">
+          <span class="s-ghost" aria-hidden="true">Éclat</span>
+          <div class="s-copy">
+            <p class="eyebrow">N° 01 · Nouvel arrivage</p>
+            <h2>Le sac <em class="name">« Éclat »</em></h2>
+            <p class="s-desc">Vernis effet croco, breloque trèfle dorée. Une allure de grande maison, du bureau à la soirée.</p>
+            <div class="s-row"><span class="price-tag" data-price="eclat"></span><a class="btn" href="#sac" data-go="eclat">Découvrir</a></div>
+          </div>
+          <div class="s-art">
+            <span class="halo"></span>
+            <img src="images/hero-eclat.png" alt="Sac Éclat noir, finition vernie effet croco" fetchpriority="high">
+            <span class="floor"></span>
+          </div>
+        </article>
+
+        <article class="slide" data-model="t" aria-label="Sac T">
+          <span class="s-ghost" aria-hidden="true">T</span>
+          <div class="s-copy">
+            <p class="eyebrow">N° 02 · Nouvel arrivage</p>
+            <h2>Le sac <em class="name">« T »</em></h2>
+            <p class="s-desc">Grain doux, fermoir argenté signature. Une ligne épurée qui se marie à toutes vos tenues.</p>
+            <div class="s-row"><span class="price-tag" data-price="t"></span><a class="btn" href="#sac" data-go="t">Découvrir</a></div>
+          </div>
+          <div class="s-art">
+            <span class="halo"></span>
+            <img src="images/hero-t.png" alt="Sac T chocolat, fermoir argenté" fetchpriority="high">
+            <span class="floor"></span>
+          </div>
+        </article>
+      </div>
+
+      <button class="arrow arrow-prev" id="heroPrev" aria-label="Modèle précédent">←</button>
+      <button class="arrow arrow-next" id="heroNext" aria-label="Modèle suivant">→</button>
+      <button class="hint" id="hint" type="button"><span class="hint-txt">Glissez pour découvrir <b id="hintName">« T »</b></span><span class="hint-arrows" aria-hidden="true"><i></i><i></i><i></i></span></button>
+
+      <div class="switch" role="tablist" aria-label="Choisir le modèle">
+        <button class="sw is-active" role="tab" aria-selected="true" data-i="0"><span class="sw-n">01</span><span class="sw-t">« Éclat »</span><i class="sw-bar"></i></button>
+        <button class="sw" role="tab" aria-selected="false" data-i="1"><span class="sw-n">02</span><span class="sw-t">« T »</span><i class="sw-bar"></i></button>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Nouvel arrivage</span><i>✦</i><span>Sac « Éclat » · 20 000 F</span><i>✦</i><span>Sac « T » · 15 000 F</span><i>✦</i><span>10 coloris</span><i>✦</i><span>Paiement à la livraison</span><i>✦</i><span>Bientôt : prêt-à-porter</span><i>✦</i>
+        <span>Nouvel arrivage</span><i>✦</i><span>Sac « Éclat » · 20 000 F</span><i>✦</i><span>Sac « T » · 15 000 F</span><i>✦</i><span>10 coloris</span><i>✦</i><span>Paiement à la livraison</span><i>✦</i><span>Bientôt : prêt-à-porter</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- BOUTIQUE -->
+    <section class="shop" id="sac">
+      <header class="head reveal">
+        <span class="tab">La boutique · Nouvel arrivage</span>
+        <h2>Choisissez votre <em>modèle</em></h2>
+      </header>
+      <div class="product">
+        <div class="stage" id="stage">
+          <img id="stageImg" src="images/eclat-noir.jpg" alt="Sac Éclat coloris Noir">
+          <span class="stage-tag" id="stageTag">Noir</span>
+          <div class="stage-nav">
+            <button id="prev" aria-label="Coloris précédent">←</button>
+            <button id="next" aria-label="Coloris suivant">→</button>
+          </div>
+        </div>
+
+        <div class="details">
+          <div class="tabs" id="tabs" role="tablist" aria-label="Modèles"></div>
+          <p class="eyebrow" id="mNum"></p>
+          <h3 id="mName"></h3>
+          <p class="price price-tag" id="mPrice"></p>
+          <p class="desc" id="mDesc"></p>
+
+          <p class="label">Coloris : <strong id="colorName"></strong></p>
+          <div class="swatches" id="swatches" role="radiogroup" aria-label="Coloris"></div>
+          <p class="stock-note" id="stockNote" hidden></p>
+
+          <div class="buy">
+            <div class="qty" role="group" aria-label="Quantité">
+              <button type="button" id="qtyMinus" aria-label="Diminuer la quantité">−</button>
+              <span id="qty" aria-live="polite">1</span>
+              <button type="button" id="qtyPlus" aria-label="Augmenter la quantité">+</button>
+            </div>
+            <button class="btn" id="add" type="button">Ajouter au panier</button>
+          </div>
+
+          <ul class="specs" id="specs"></ul>
+
+          <a class="btn ghost btn-block" id="order" href="#" target="_blank" rel="noopener">Commander directement sur WhatsApp</a>
+          <ul class="trust">
+            <li>Paiement à la livraison ou Mobile Money</li>
+            <li>Livraison confirmée par message</li>
+            <li>Service client sur WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLORIS -->
+    <section class="colors" id="coloris">
+      <header class="head reveal">
+        <span class="tab">La collection</span>
+        <h2>Deux modèles, <em>dix coloris</em></h2>
+      </header>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- ÉDITORIAL -->
+    <section class="editorial">
+      <div class="editorial-img" role="img" aria-label="Sacs Glory Home sur un socle"></div>
+      <blockquote class="reveal">
+        <p>« Le luxe, c'est de ne pas avoir à choisir entre l'élégance et le quotidien. »</p>
+        <cite>Glory Home</cite>
+      </blockquote>
+    </section>
+
+    <!-- SAVOIR-FAIRE -->
+    <section class="craft" id="savoir-faire">
+      <header class="head reveal">
+        <span class="tab">Savoir-faire</span>
+        <h2>Le détail, <em>jusqu'au bout</em></h2>
+      </header>
+      <div class="craft-grid">
+        <article class="reveal"><span class="num">01</span><h3>Les détails métal</h3><p>Fermoir « T » argenté ou breloque trèfle dorée : chaque pièce est dessinée comme un bijou et donne au sac son identité.</p></article>
+        <article class="reveal d1"><span class="num">02</span><h3>Les finitions</h3><p>Grain doux ou vernis effet croco, coutures nettes : la précision qui fait la différence au regard comme au toucher.</p></article>
+        <article class="reveal d2"><span class="num">03</span><h3>Deux façons de porter</h3><p>À la main par l'anse, ou sur l'épaule avec la bandoulière, pour passer du jour au soir sans changer de sac.</p></article>
+      </div>
+    </section>
+
+    <!-- COMMANDER -->
+    <section class="order" id="commander">
+      <header class="head reveal">
+        <span class="tab">Commander</span>
+        <h2>Simple, <em>comme une conversation</em></h2>
+      </header>
+      <ol class="steps">
+        <li class="reveal"><span>1</span><h3>Choisissez</h3><p>Sélectionnez votre modèle et votre coloris, puis ajoutez-les au panier.</p></li>
+        <li class="reveal d1"><span>2</span><h3>Validez</h3><p>Indiquez votre adresse et votre mode de paiement. Vous recevez un numéro de commande.</p></li>
+        <li class="reveal d2"><span>3</span><h3>Recevez</h3><p>Nous confirmons la livraison avec vous sur WhatsApp.</p></li>
+      </ol>
+      <div class="contact-links reveal">
+        <a class="btn" id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn ghost" id="mail" href="#">Email</a>
+        <a class="btn ghost" id="insta" href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </section>
+
+    <!-- AIDE -->
+    <section class="faq" id="faq">
+      <header class="head reveal">
+        <span class="tab">Aide</span>
+        <h2>Vos <em>questions</em></h2>
+      </header>
+      <div class="faq-list reveal">
+        <details><summary>Comment passer commande ?</summary><p>Ajoutez le sac et le coloris de votre choix au panier, puis validez avec votre adresse. Vous recevez un numéro de commande et pouvez nous l'envoyer sur WhatsApp pour confirmer la livraison. Vous pouvez aussi commander directement par message depuis chaque fiche produit.</p></details>
+        <details><summary>Quels sont les moyens de paiement ?</summary><p>Paiement à la livraison, ou Mobile Money (Wave, Orange Money…). Pour le Mobile Money, nous vous envoyons les instructions de paiement sur WhatsApp après votre commande.</p></details>
+        <details><summary>Quels sont les délais et frais de livraison ?</summary><p>Ils dépendent de votre ville. Nous vous les confirmons par message avant l'expédition, pour que vous sachiez exactement ce que vous payez.</p></details>
+        <details><summary>Comment suivre ma commande ?</summary><p>Rendez-vous sur la page <a href="suivi.html">Suivre ma commande</a> avec votre numéro de commande et le téléphone utilisé lors de l'achat.</p></details>
+        <details><summary>Les couleurs sont-elles fidèles aux photos ?</summary><p>Nous photographions chaque coloris avec soin. De légères différences peuvent exister selon l'écran. En cas de doute, écrivez-nous : nous vous répondons rapidement.</p></details>
+        <details><summary>Que faire si mon article ne convient pas ou présente un défaut ?</summary><p>Contactez-nous le plus tôt possible sur WhatsApp avec une photo : nous cherchons une solution avec vous. Les conditions complètes figurent dans les <a href="livraison-retours.html">conditions de livraison et de retour</a>.</p></details>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <header class="head reveal">
+        <span class="tab">Contact</span>
+        <h2>Écrivez-<em>nous</em></h2>
+      </header>
+      <div class="contact-grid">
+        <p class="contact-intro reveal">Une question sur un modèle, un coloris, une livraison ? Laissez-nous un message, nous vous répondons rapidement. Pour une réponse immédiate, utilisez WhatsApp.</p>
+        <form class="form reveal" id="contactForm">
+          <label>Votre nom<input name="name" required maxlength="80" autocomplete="name"></label>
+          <label>Téléphone ou email<input name="contact" required maxlength="120" autocomplete="email"></label>
+          <label>Message<textarea name="message" rows="4" required maxlength="2000"></textarea></label>
+          <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn" type="submit">Envoyer</button>
+          <p class="form-msg" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img class="footer-mark" src="images/logo-mark-160.png" alt="">
+        <p>Glory Home<br>Vêtements &amp; accessoires féminins</p>
+      </div>
+      <nav class="foot-col" aria-label="Boutique">
+        <h4>Boutique</h4>
+        <a href="#sac">Le sac « Éclat »</a>
+        <a href="#sac">Le sac « T »</a>
+        <a href="#coloris">Tous les coloris</a>
+        <a href="suivi.html">Suivre ma commande</a>
+      </nav>
+      <nav class="foot-col" aria-label="Informations">
+        <h4>Informations</h4>
+        <a href="livraison-retours.html">Livraison et retours</a>
+        <a href="cgv.html">Conditions générales de vente</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+      <form class="foot-news" id="newsletter">
+        <h4>Nouveaux arrivages</h4>
+        <p>Soyez la première informée de nos nouveautés.</p>
+        <div class="news-row"><input type="email" name="email" placeholder="Votre email" required aria-label="Votre email" autocomplete="email"><button class="btn" type="submit">S'inscrire</button></div>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="form-msg" role="status"></p>
+      </form>
+    </div>
+    <p class="giant" aria-hidden="true">GLORY HOME</p>
+    <p class="copy">© <span id="year"></span> Glory Home — Tous droits réservés</p>
+  </footer>
+
+  <!-- Panier -->
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="drawer" id="cart" aria-label="Panier" aria-hidden="true">
+    <header class="drawer-head"><h2>Votre panier</h2><button id="cartClose" class="x" aria-label="Fermer le panier">✕</button></header>
+    <div class="drawer-body">
+      <div class="empty" id="cartEmpty"><p>Votre panier est vide.</p><button class="btn ghost" id="keepShopping" type="button">Voir les sacs</button></div>
+      <ul class="lines" id="cartList"></ul>
+    </div>
+    <div class="drawer-foot" id="cartFoot" hidden>
+      <dl class="totals">
+        <div><dt>Sous-total</dt><dd id="cartSub"></dd></div>
+        <div><dt>Livraison</dt><dd id="cartDelivery"></dd></div>
+        <div class="grand"><dt>Total</dt><dd id="cartTotal"></dd></div>
+      </dl>
+      <button class="btn btn-block" id="goCheckout" type="button">Passer la commande</button>
+    </div>
+  </aside>
+
+  <!-- Commande -->
+  <dialog class="checkout" id="checkout" aria-labelledby="coTitle">
+    <button class="x" id="checkoutClose" type="button" aria-label="Fermer">✕</button>
+    <form id="orderForm" class="co-grid">
+      <div class="co-main">
+        <h2 id="coTitle">Finaliser ma commande</h2>
+        <fieldset><legend>Vos coordonnées</legend>
+          <label>Nom complet<input name="name" required maxlength="80" autocomplete="name"></label>
+          <label>Téléphone (WhatsApp de préférence)<input name="phone" type="tel" required maxlength="25" autocomplete="tel" inputmode="tel"></label>
+          <label>Email (facultatif)<input name="email" type="email" maxlength="120" autocomplete="email"></label>
+        </fieldset>
+        <fieldset><legend>Livraison</legend>
+          <label>Ville<input name="city" required maxlength="80" autocomplete="address-level2"></label>
+          <label>Quartier et adresse<input name="address" required maxlength="200" autocomplete="street-address"></label>
+          <label>Précisions pour le livreur (facultatif)<textarea name="notes" rows="2" maxlength="300"></textarea></label>
+        </fieldset>
+        <fieldset><legend>Paiement</legend>
+          <div id="payList"></div>
+        </fieldset>
+        <label class="check"><input type="checkbox" name="cgv" required><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a>.</span></label>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      </div>
+      <aside class="co-side">
+        <h3>Récapitulatif</h3>
+        <ul class="sum" id="sumList"></ul>
+        <dl class="totals">
+          <div><dt>Sous-total</dt><dd id="sumSub"></dd></div>
+          <div><dt>Livraison</dt><dd id="sumDelivery"></dd></div>
+          <div class="grand"><dt>Total</dt><dd id="sumTotal"></dd></div>
+        </dl>
+        <p class="co-note" id="coNote"></p>
+        <p class="form-error" id="formError" role="alert" hidden></p>
+        <button class="btn btn-block" id="submitOrder" type="submit">Confirmer la commande</button>
+      </aside>
+    </form>
+    <div class="done" id="done" hidden>
+      <div class="tick" aria-hidden="true">✓</div>
+      <h2>Commande enregistrée</h2>
+      <p>Merci ! Votre numéro de commande :</p>
+      <p class="num" id="doneNum"></p>
+      <p>Total : <b id="doneTotal"></b></p>
+      <p class="done-help">Dernière étape : envoyez-nous votre commande sur WhatsApp pour que nous confirmions la livraison et le paiement avec vous.</p>
+      <a class="btn btn-block" id="doneWa" href="#" target="_blank" rel="noopener">Envoyer ma commande sur WhatsApp</a>
+      <a class="btn ghost btn-block" id="doneTrack" href="suivi.html">Suivre ma commande</a>
+      <button class="link-btn" id="doneClose" type="button">Fermer</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="config.js"></script>
+  <script src="catalog.js"></script>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+  <script src="shop.js"></script>
+</body>
+</html>

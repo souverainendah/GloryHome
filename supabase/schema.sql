@@ -1,0 +1,185 @@
+-- Glory Home : schéma Supabase (à exécuter une fois dans l'éditeur SQL du projet).
+-- Les clients passent uniquement par les fonctions create_order / track_order : ils ne lisent jamais les commandes.
+
+create table if not exists products (
+  id text primary key,
+  name text not null,
+  price integer not null check (price >= 0),
+  active boolean not null default true,
+  sort integer not null default 0
+);
+
+create table if not exists variants (
+  id bigserial primary key,
+  product_id text not null references products(id) on delete cascade,
+  color text not null,
+  stock integer not null default 0 check (stock >= 0),
+  unique (product_id, color)
+);
+
+create table if not exists orders (
+  id uuid primary key default gen_random_uuid(),
+  number text unique not null,
+  created_at timestamptz not null default now(),
+  status text not null default 'nouvelle' check (status in ('nouvelle','confirmee','preparation','expediee','livree','annulee')),
+  customer_name text not null,
+  phone text not null,
+  email text,
+  city text not null,
+  address text not null,
+  notes text,
+  payment text not null,
+  subtotal integer not null,
+  delivery integer not null default 0,
+  total integer not null
+);
+
+create table if not exists order_items (
+  id bigserial primary key,
+  order_id uuid not null references orders(id) on delete cascade,
+  product_id text not null,
+  product_name text not null,
+  color text not null,
+  qty integer not null check (qty between 1 and 10),
+  unit_price integer not null
+);
+
+create table if not exists subscribers (
+  email text primary key check (email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'),
+  created_at timestamptz not null default now()
+);
+
+create table if not exists messages (
+  id bigserial primary key,
+  created_at timestamptz not null default now(),
+  name text not null check (length(name) <= 80),
+  contact text not null check (length(contact) <= 120),
+  message text not null check (length(message) <= 2000)
+);
+
+create table if not exists admins (
+  user_id uuid primary key references auth.users(id) on delete cascade
+);
+
+-- Administrateur ?
+create or replace function is_admin() returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from admins where user_id = auth.uid());
+$$;
+
+-- Création d'une commande : prix et stock vérifiés côté serveur
+create or replace function create_order(payload jsonb) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare
+  c jsonb := payload->'customer';
+  item jsonb;
+  prod products%rowtype;
+  v_qty integer;
+  v_sub integer := 0;
+  v_num text;
+  v_id uuid;
+  v_pay text := payload->>'payment';
+begin
+  if c is null or coalesce(trim(c->>'name'), '') = '' or coalesce(trim(c->>'phone'), '') = ''
+     or coalesce(trim(c->>'city'), '') = '' or coalesce(trim(c->>'address'), '') = '' then
+    raise exception 'Informations de livraison incomplètes.';
+  end if;
+  if length(regexp_replace(c->>'phone', '\D', '', 'g')) not between 8 and 15 then
+    raise exception 'Numéro de téléphone invalide.';
+  end if;
+  if v_pay not in ('livraison', 'mobile') then raise exception 'Mode de paiement invalide.'; end if;
+  if jsonb_typeof(payload->'items') <> 'array' or jsonb_array_length(payload->'items') not between 1 and 10 then
+    raise exception 'Panier invalide.';
+  end if;
+
+  loop
+    v_num := 'GH-' || to_char(now(), 'YYMMDD') || '-' || lpad((floor(random() * 10000))::int::text, 4, '0');
+    exit when not exists (select 1 from orders where number = v_num);
+  end loop;
+
+  insert into orders (number, customer_name, phone, email, city, address, notes, payment, subtotal, total)
+  values (v_num, left(trim(c->>'name'), 80), left(trim(c->>'phone'), 25), nullif(left(trim(coalesce(c->>'email', '')), 120), ''),
+          left(trim(c->>'city'), 80), left(trim(c->>'address'), 200), nullif(left(trim(coalesce(c->>'notes', '')), 300), ''), v_pay, 0, 0)
+  returning id into v_id;
+
+  for item in select * from jsonb_array_elements(payload->'items') loop
+    v_qty := (item->>'q')::integer;
+    if v_qty is null or v_qty not between 1 and 10 then raise exception 'Quantité invalide.'; end if;
+    select * into prod from products where id = item->>'p' and active;
+    if not found then raise exception 'Produit indisponible.'; end if;
+    update variants set stock = stock - v_qty where product_id = prod.id and color = item->>'c' and stock >= v_qty;
+    if not found then raise exception 'Stock insuffisant pour % (%).', prod.name, item->>'c'; end if;
+    insert into order_items (order_id, product_id, product_name, color, qty, unit_price)
+    values (v_id, prod.id, prod.name, item->>'c', v_qty, prod.price);
+    v_sub := v_sub + prod.price * v_qty;
+  end loop;
+
+  update orders set subtotal = v_sub, total = v_sub + delivery where id = v_id;
+  return jsonb_build_object('number', v_num, 'total', v_sub);
+end $$;
+
+-- Suivi : numéro + 8 derniers chiffres du téléphone
+create or replace function track_order(p_number text, p_phone text) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare o orders%rowtype;
+begin
+  select * into o from orders
+  where number = upper(trim(p_number))
+    and right(regexp_replace(phone, '\D', '', 'g'), 8) = right(regexp_replace(coalesce(p_phone, ''), '\D', '', 'g'), 8);
+  if not found then return null; end if;
+  return jsonb_build_object('status', o.status, 'created_at', o.created_at, 'total', o.total,
+    'items', (select coalesce(jsonb_agg(jsonb_build_object('product_name', product_name, 'color', color, 'qty', qty)), '[]'::jsonb)
+              from order_items where order_id = o.id));
+end $$;
+
+-- Annulation : le stock est remis en rayon
+create or replace function restock_on_cancel() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if new.status = 'annulee' and old.status <> 'annulee' then
+    update variants v set stock = v.stock + i.qty
+    from order_items i where i.order_id = new.id and v.product_id = i.product_id and v.color = i.color;
+  end if;
+  return new;
+end $$;
+drop trigger if exists orders_restock on orders;
+create trigger orders_restock after update of status on orders for each row execute function restock_on_cancel();
+
+-- Sécurité (RLS)
+alter table products enable row level security;
+alter table variants enable row level security;
+alter table orders enable row level security;
+alter table order_items enable row level security;
+alter table subscribers enable row level security;
+alter table messages enable row level security;
+alter table admins enable row level security;
+
+create policy products_read on products for select using (active or is_admin());
+create policy products_admin on products for all using (is_admin()) with check (is_admin());
+create policy variants_read on variants for select using (true);
+create policy variants_admin on variants for all using (is_admin()) with check (is_admin());
+create policy orders_admin_read on orders for select using (is_admin());
+create policy orders_admin_update on orders for update using (is_admin()) with check (is_admin());
+create policy items_admin_read on order_items for select using (is_admin());
+create policy subscribers_insert on subscribers for insert with check (true);
+create policy subscribers_admin_read on subscribers for select using (is_admin());
+create policy messages_insert on messages for insert with check (true);
+create policy messages_admin_read on messages for select using (is_admin());
+create policy admins_self on admins for select using (user_id = auth.uid());
+
+revoke all on function create_order(jsonb), track_order(text, text) from public;
+grant execute on function create_order(jsonb), track_order(text, text) to anon, authenticated;
+
+-- Catalogue de départ (les quantités sont à ajuster dans l'espace admin)
+insert into products (id, name, price, sort) values
+  ('eclat', 'Le sac « Éclat »', 20000, 1),
+  ('t', 'Le sac « T »', 15000, 2)
+on conflict (id) do nothing;
+
+insert into variants (product_id, color, stock) values
+  ('eclat', 'Noir', 10), ('eclat', 'Émeraude', 10), ('eclat', 'Bleu nuit', 10), ('eclat', 'Bronze', 10), ('eclat', 'Bordeaux', 10),
+  ('t', 'Ivoire', 10), ('t', 'Chocolat', 10), ('t', 'Pistache', 10), ('t', 'Gris perle', 10), ('t', 'Bordeaux', 10)
+on conflict (product_id, color) do nothing;
+
+-- Après avoir créé votre compte dans Authentication > Users, donnez-vous l'accès admin :
+-- insert into admins (user_id) select id from auth.users where email = 'VOTRE_EMAIL';

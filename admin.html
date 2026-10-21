@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administration – Glory Home</title>
+  <link rel="icon" type="image/png" href="images/logo-mark-160.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: var(--ivory); }
+    .adm { max-width: 1240px; margin: 0 auto; padding: 28px var(--pad) 80px; }
+    .adm-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+    .adm-top h1 { font-size: 1.8rem; }
+    .adm-mode { font-size: .8rem; padding: 6px 12px; background: #fff4d6; }
+    .adm-mode.live { background: #e3f4e8; }
+    .login { max-width: 380px; margin: 14vh auto; display: grid; gap: 14px; background: #fff; padding: 32px; box-shadow: var(--shadow); }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 26px; }
+    .kpi { background: #fff; padding: 18px 20px; box-shadow: 0 10px 30px -22px rgba(60, 15, 30, .5); }
+    .kpi b { display: block; font-family: var(--display); font-size: 1.9rem; font-weight: 500; }
+    .kpi span { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: #5c4a51; }
+    .tabsbar { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+    .tabsbar button { font: inherit; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; padding: 10px 18px; border: 0; background: #fff; cursor: pointer; color: #5c4a51; }
+    .tabsbar button.on { background: var(--bord); color: #fff; }
+    .tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .tools input, .tools select { width: auto; min-width: 200px; }
+    select { font: inherit; background: #fff; border: 0; box-shadow: inset 0 0 0 1px #d9cdc8; padding: 10px 12px; }
+    .tbl { width: 100%; background: #fff; border-collapse: collapse; font-size: .9rem; }
+    .tbl th { text-align: left; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: #5c4a51; padding: 12px; background: #f6f0ec; }
+    .tbl td { padding: 12px; border-top: 1px solid var(--hair); vertical-align: top; }
+    .tbl .num { font-weight: 600; white-space: nowrap; }
+    .wrap { overflow-x: auto; }
+    .pill { display: inline-block; padding: 3px 10px; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; background: #eee; }
+    .pill.nouvelle { background: #fde7ee; color: var(--bord-dark); }
+    .pill.annulee { background: #eee; color: #777; }
+    .pill.livree { background: #e3f4e8; color: #1f6b3a; }
+    .muted { color: #5c4a51; font-size: .82rem; }
+    .adm .btn { padding: 10px 18px; font-size: .7rem; }
+    .adm .num-in { width: 110px; }
+    .empty-row { text-align: center; padding: 40px; color: #5c4a51; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <section class="login" id="login" hidden>
+    <h1>Administration</h1>
+    <p class="muted">Connectez-vous avec le compte administrateur.</p>
+    <label>Email<input id="email" type="email" autocomplete="username" required></label>
+    <label>Mot de passe<input id="pwd" type="password" autocomplete="current-password" required></label>
+    <p class="form-error" id="loginErr" hidden></p>
+    <button class="btn" id="loginBtn" type="button">Se connecter</button>
+  </section>
+
+  <div class="adm" id="app" hidden>
+    <div class="adm-top">
+      <h1>Glory Home · Administration</h1>
+      <div><span class="adm-mode" id="mode"></span> <button class="btn ghost" id="logout" type="button" hidden>Déconnexion</button></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="tabsbar" id="tabsbar">
+      <button class="on" data-t="orders">Commandes</button>
+      <button data-t="products">Produits et stock</button>
+      <button data-t="messages">Messages</button>
+      <button data-t="subs">Inscrits newsletter</button>
+    </div>
+
+    <section id="t-orders">
+      <div class="tools">
+        <input id="q" placeholder="Rechercher un nom, un numéro, un téléphone" aria-label="Rechercher">
+        <select id="statusFilter" aria-label="Filtrer par statut"></select>
+        <button class="btn ghost" id="csv" type="button">Exporter en CSV</button>
+      </div>
+      <div class="wrap"><table class="tbl"><thead><tr><th>Commande</th><th>Client</th><th>Articles</th><th>Total</th><th>Paiement</th><th>Statut</th></tr></thead><tbody id="orders"></tbody></table></div>
+    </section>
+
+    <section id="t-products" hidden>
+      <p class="muted" id="prodNote"></p>
+      <div class="wrap"><table class="tbl"><thead><tr><th>Produit</th><th>Prix (F)</th><th>Coloris et stock</th><th></th></tr></thead><tbody id="prods"></tbody></table></div>
+    </section>
+
+    <section id="t-messages" hidden><div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Nom</th><th>Contact</th><th>Message</th></tr></thead><tbody id="msgs"></tbody></table></div></section>
+    <section id="t-subs" hidden><div class="wrap"><table class="tbl"><thead><tr><th>Email</th><th>Inscrit le</th></tr></thead><tbody id="subs"></tbody></table></div></section>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="catalog.js"></script>
+  <script src="api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

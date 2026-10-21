@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.gloryhome.example/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.gloryhome.example/suivi.html</loc><priority>0.4</priority></url>
+  <url><loc>https://www.gloryhome.example/livraison-retours.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.gloryhome.example/cgv.html</loc><priority>0.3</priority></url>
+  <url><loc>https://www.gloryhome.example/confidentialite.html</loc><priority>0.3</priority></url>
+  <url><loc>https://www.gloryhome.example/mentions-legales.html</loc><priority>0.3</priority></url>
+</urlset>
