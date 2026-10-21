@@ -10,7 +10,6 @@ Boutique en ligne de vêtements et accessoires féminins. Site statique (HTML, C
 | `catalog.js` | Produits, prix, coloris (source unique) |
 | `config.js` | Réglages : WhatsApp, email, Supabase, paiements, livraison |
 | `api.js` | Accès aux données (Supabase ou mode démo local) |
-| `suivi.html`, `suivi.js` | Suivi de commande par le client |
 | `admin.html`, `admin.js` | Administration : commandes, stock, messages, inscrits |
 | `supabase/schema.sql` | Base de données, sécurité et fonctions |
 | `cgv.html`, `mentions-legales.html`, `confidentialite.html`, `livraison-retours.html` | Pages légales (champs jaunes à compléter) |

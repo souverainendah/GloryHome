@@ -196,7 +196,6 @@
       $("#doneNum").textContent = res.number;
       $("#doneTotal").textContent = fmt(res.total);
       $("#doneWa").href = `https://wa.me/${G.whatsapp}?text=${encodeURIComponent(msg)}`;
-      $("#doneTrack").href = `suivi.html?n=${encodeURIComponent(res.number)}`;
       $("#orderForm").hidden = true;
       $("#done").hidden = false;
       cart = [];
