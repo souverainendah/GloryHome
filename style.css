@@ -430,3 +430,27 @@ input:user-invalid, textarea:user-invalid { box-shadow: inset 0 0 0 2px #c0392b;
 .foot-contact { margin-top: 14px; line-height: 1.9; }
 .wa-float { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 55; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bord); color: #fff; box-shadow: 0 16px 36px -12px rgba(91, 15, 37, .7); transition: transform .3s var(--ease), background .3s; }
 .wa-float:hover { transform: scale(1.08); background: var(--bord-dark); }
+
+/* ===== En-tête : logo mis en valeur, menu bien séparé ===== */
+.header { display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); }
+.brand { order: 0; gap: 14px; font-size: 1.05rem; letter-spacing: .3em; margin-right: auto; }
+.brand img { height: 46px; filter: drop-shadow(0 6px 10px rgba(123, 22, 50, .18)); }
+.nav { order: 1; gap: clamp(18px, 2.2vw, 34px); }
+.hr { order: 2; }
+.burger { order: 3; }
+@media (min-width: 961px) and (max-width: 1100px) { .brand { letter-spacing: .22em; font-size: .95rem; } .nav a { font-size: .66rem; letter-spacing: .14em; } }
+@media (max-width: 960px) {
+  .header { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; }
+  .brand { order: 0; margin-right: 0; font-size: .86rem; letter-spacing: .24em; gap: 10px; }
+  .brand img { height: 38px; }
+  .burger, .nav, .hr { order: 0; }
+}
+
+/* ===== Icône WhatsApp ===== */
+.wa-ico::before { content: ""; display: inline-block; flex: none; width: 1.25em; height: 1.25em; margin-right: .6em; vertical-align: -.25em; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20448%20512%27%3E%3Cpath%20d%3D%27M380.9%2097.1C339%2055.1%20283.2%2032%20223.9%2032c-122.4%200-222%2099.6-222%20222%200%2039.1%2010.2%2077.3%2029.6%20111L0%20480l117.7-30.9c32.4%2017.7%2068.9%2027%20106.1%2027h.1c122.3%200%20224.1-99.6%20224.1-222%200-59.3-25.2-115-67.1-157zm-157%20341.6c-33.2%200-65.7-8.9-94-25.7l-6.7-4-69.8%2018.3L72%20359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2%200-101.7%2082.8-184.5%20184.6-184.5%2049.3%200%2095.6%2019.2%20130.4%2054.1%2034.8%2034.9%2056.2%2081.2%2056.1%20130.5%200%20101.8-84.9%20184.6-186.6%20184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5%202.8-3.7%205.6-14.3%2018-17.6%2021.8-3.2%203.7-6.5%204.2-12%201.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8%205.7-9.1%2016.3-30.3%201.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.700%200-9.7%201.4-14.8%206.9-5.1%205.6-19.4%2019-19.4%2046.3%200%2027.3%2019.9%2053.7%2022.6%2057.4%202.8%203.7%2039.1%2059.7%2094.8%2083.8%2035.2%2015.2%2049%2016.5%2066.6%2013.9%2010.7-1.6%2032.8-13.4%2037.4-26.4%204.6-13%204.6-24.1%203.2-26.4-1.3-2.5-5-3.9-10.5-6.6z%27%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20448%20512%27%3E%3Cpath%20d%3D%27M380.9%2097.1C339%2055.1%20283.2%2032%20223.9%2032c-122.4%200-222%2099.6-222%20222%200%2039.1%2010.2%2077.3%2029.6%20111L0%20480l117.7-30.9c32.4%2017.7%2068.9%2027%20106.1%2027h.1c122.3%200%20224.1-99.6%20224.1-222%200-59.3-25.2-115-67.1-157zm-157%20341.6c-33.2%200-65.7-8.9-94-25.7l-6.7-4-69.8%2018.3L72%20359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2%200-101.7%2082.8-184.5%20184.6-184.5%2049.3%200%2095.6%2019.2%20130.4%2054.1%2034.8%2034.9%2056.2%2081.2%2056.1%20130.5%200%20101.8-84.9%20184.6-186.6%20184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5%202.8-3.7%205.6-14.3%2018-17.6%2021.8-3.2%203.7-6.5%204.2-12%201.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8%205.7-9.1%2016.3-30.3%201.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.700%200-9.7%201.4-14.8%206.9-5.1%205.6-19.4%2019-19.4%2046.3%200%2027.3%2019.9%2053.7%2022.6%2057.4%202.8%203.7%2039.1%2059.7%2094.8%2083.8%2035.2%2015.2%2049%2016.5%2066.6%2013.9%2010.7-1.6%2032.8-13.4%2037.4-26.4%204.6-13%204.6-24.1%203.2-26.4-1.3-2.5-5-3.9-10.5-6.6z%27%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; }
+.btn.wa-ico { display: inline-flex; align-items: center; justify-content: center; }
+.btn.btn-block.wa-ico { display: flex; }
+.contact-list a.wa-ico::before { width: .9em; height: .9em; vertical-align: -.05em; color: #1fa855; }
+.wa-float { background: #25d366; box-shadow: 0 16px 36px -12px rgba(18, 140, 70, .7); }
+.wa-float:hover { background: #1ebe57; }
+.wa-float::before { margin: 0; width: 32px; height: 32px; vertical-align: 0; }
