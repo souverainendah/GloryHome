@@ -9,6 +9,5 @@ window.GLORY = {
   deliveryNote: "Les frais et le délai de livraison vous sont confirmés par message avant l'expédition.",
   payments: [
     { id: "livraison", label: "Paiement à la livraison", hint: "Vous payez à la réception de votre colis." },
-    { id: "mobile", label: "Mobile Money (Wave, Orange Money…)", hint: "Nous vous envoyons les instructions de paiement sur WhatsApp." },
   ],
 };

@@ -87,7 +87,7 @@ begin
   if length(regexp_replace(c->>'phone', '\D', '', 'g')) not between 8 and 15 then
     raise exception 'Numéro de téléphone invalide.';
   end if;
-  if v_pay not in ('livraison', 'mobile') then raise exception 'Mode de paiement invalide.'; end if;
+  if v_pay <> 'livraison' then raise exception 'Mode de paiement invalide.'; end if;
   if jsonb_typeof(payload->'items') <> 'array' or jsonb_array_length(payload->'items') not between 1 and 10 then
     raise exception 'Panier invalide.';
   end if;
