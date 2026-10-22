@@ -17,7 +17,7 @@
   <link rel="icon" type="image/png" href="images/logo-mark-160.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -51,65 +51,50 @@
     <!-- HERO : bannière qui circule entre les deux modèles -->
     <section class="hero" id="hero" aria-roledescription="carrousel" aria-label="Nos deux modèles">
       <h1 class="sr">Glory Home, vêtements et accessoires féminins</h1>
-      <p class="arrival"><span class="dot" aria-hidden="true"></span>Nouvel arrivage<span class="arrival-more"> · d'autres pièces arrivent bientôt</span></p>
-      <div class="hero-bg" aria-hidden="true"><i class="bloom b1"></i><i class="bloom b2"></i><div class="motes" id="motes"></div></div>
 
       <div class="slides">
-        <article class="slide is-active" data-model="eclat" aria-label="Sac Éclat">
+        <article class="slide scene-eclat is-active" data-model="eclat" aria-label="Sac Éclat">
+          <div class="set" aria-hidden="true"><i class="niche"></i><i class="beam"></i><i class="floor-plane"></i></div>
           <div class="s-copy">
-            <p class="eyebrow">N° 01 · Nouvel arrivage</p>
-            <h2>Le sac <em class="name">« Éclat »</em></h2>
+            <p class="eyebrow">N° 01 · Le sac</p>
+            <h2>Éclat</h2>
             <p class="s-desc">Vernis effet croco, breloque trèfle dorée. Une allure de grande maison, du bureau à la soirée.</p>
             <div class="s-row"><span class="price-tag" data-price="eclat"></span><a class="btn" href="#sac" data-go="eclat">Découvrir</a></div>
           </div>
           <div class="s-art">
-            <span class="orb" aria-hidden="true"></span>
-            <i class="sparkle sp1" aria-hidden="true">✦</i><i class="sparkle sp2" aria-hidden="true">✦</i><i class="sparkle sp3" aria-hidden="true">✦</i>
-            <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true"><circle class="stk-bg" cx="60" cy="60" r="57"/><defs><path id="stk1" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><g class="ring-spin"><text><textPath href="#stk1" textLength="274" lengthAdjust="spacing">NOUVEL ARRIVAGE ✦ GLORY HOME ✦ </textPath></text></g><text class="stk-n" x="60" y="69" text-anchor="middle">01</text></svg>
-            <img src="images/hero-eclat.png" alt="Sac Éclat noir, finition vernie effet croco" fetchpriority="high">
-            <span class="floor"></span>
+            <img src="images/hero-eclat.png" alt="Sac Éclat noir, finition vernie effet croco" fetchpriority="high" draggable="false">
+            <div class="stand" aria-hidden="true"><i class="stand-top"></i><i class="stand-body"></i></div>
           </div>
         </article>
 
-        <article class="slide" data-model="t" aria-label="Sac T">
+        <article class="slide scene-t" data-model="t" aria-label="Sac T">
+          <div class="set" aria-hidden="true"><i class="niche"></i><i class="beam"></i><i class="floor-plane"></i></div>
           <div class="s-copy">
-            <p class="eyebrow">N° 02 · Nouvel arrivage</p>
-            <h2>Le sac <em class="name">« T »</em></h2>
+            <p class="eyebrow">N° 02 · Le sac</p>
+            <h2>T</h2>
             <p class="s-desc">Grain doux, fermoir argenté signature. Une ligne épurée qui se marie à toutes vos tenues.</p>
             <div class="s-row"><span class="price-tag" data-price="t"></span><a class="btn" href="#sac" data-go="t">Découvrir</a></div>
           </div>
           <div class="s-art">
-            <span class="orb" aria-hidden="true"></span>
-            <i class="sparkle sp1" aria-hidden="true">✦</i><i class="sparkle sp2" aria-hidden="true">✦</i><i class="sparkle sp3" aria-hidden="true">✦</i>
-            <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true"><circle class="stk-bg" cx="60" cy="60" r="57"/><defs><path id="stk2" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><g class="ring-spin"><text><textPath href="#stk2" textLength="274" lengthAdjust="spacing">NOUVEL ARRIVAGE ✦ GLORY HOME ✦ </textPath></text></g><text class="stk-n" x="60" y="69" text-anchor="middle">02</text></svg>
-            <img src="images/hero-t.png" alt="Sac T chocolat, fermoir argenté" fetchpriority="high">
-            <span class="floor"></span>
+            <img src="images/hero-t.png" alt="Sac T chocolat, fermoir argenté" fetchpriority="high" draggable="false">
+            <div class="stand" aria-hidden="true"><i class="stand-top"></i><i class="stand-body"></i></div>
           </div>
         </article>
       </div>
 
       <button class="arrow arrow-prev" id="heroPrev" aria-label="Modèle précédent">←</button>
       <button class="arrow arrow-next" id="heroNext" aria-label="Modèle suivant">→</button>
-      <button class="hint" id="hint" type="button"><span class="hint-txt">Glissez pour découvrir <b id="hintName">« T »</b></span><span class="hint-arrows" aria-hidden="true"><i></i><i></i><i></i></span></button>
 
       <div class="switch" role="tablist" aria-label="Choisir le modèle">
-        <button class="sw is-active" role="tab" aria-selected="true" data-i="0"><span class="sw-n">01</span><span class="sw-t">« Éclat »</span><i class="sw-bar"></i></button>
-        <button class="sw" role="tab" aria-selected="false" data-i="1"><span class="sw-n">02</span><span class="sw-t">« T »</span><i class="sw-bar"></i></button>
+        <button class="sw is-active" role="tab" aria-selected="true" data-i="0"><span class="sw-n">01</span><span class="sw-t">« Éclat »</span></button>
+        <button class="sw" role="tab" aria-selected="false" data-i="1"><span class="sw-n">02</span><span class="sw-t">« T »</span></button>
       </div>
     </section>
-
-    <!-- MARQUEE -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Nouvel arrivage</span><i>✦</i><span>Sac « Éclat » · 20 000 F</span><i>✦</i><span>Sac « T » · 15 000 F</span><i>✦</i><span>10 coloris</span><i>✦</i><span>Paiement à la livraison</span><i>✦</i><span>Bientôt : prêt-à-porter</span><i>✦</i>
-        <span>Nouvel arrivage</span><i>✦</i><span>Sac « Éclat » · 20 000 F</span><i>✦</i><span>Sac « T » · 15 000 F</span><i>✦</i><span>10 coloris</span><i>✦</i><span>Paiement à la livraison</span><i>✦</i><span>Bientôt : prêt-à-porter</span><i>✦</i>
-      </div>
-    </div>
 
     <!-- BOUTIQUE -->
     <section class="shop" id="sac">
       <header class="head reveal">
-        <span class="tab">La boutique · Nouvel arrivage</span>
+        <span class="tab">La boutique</span>
         <h2>Choisissez votre <em>modèle</em></h2>
       </header>
       <div class="product">
@@ -144,11 +129,10 @@
 
           <ul class="specs" id="specs"></ul>
 
-          <a class="btn ghost btn-block wa-ico" id="order" href="#" target="_blank" rel="noopener">Commander directement sur WhatsApp</a>
-          <ul class="trust">
-            <li>Paiement à la livraison, rien à payer en ligne</li>
-            <li>Livraison à Abidjan dès 1 500 F</li>
-            <li>Service client sur WhatsApp</li>
+                    <ul class="trust">
+            <li><b>Livraison</b>Abidjan, dès 1 500 F</li>
+            <li><b>Paiement</b>À la réception</li>
+            <li><b>Conseil</b>Écrivez-nous</li>
           </ul>
         </div>
       </div>
@@ -167,7 +151,7 @@
     <section class="editorial">
       <div class="editorial-img" role="img" aria-label="Sacs Glory Home sur un socle"></div>
       <blockquote class="reveal">
-        <p>« Le luxe, c'est de ne pas avoir à choisir entre l'élégance et le quotidien. »</p>
+        <p>Chic, girly, glorieuse.</p>
         <cite>Glory Home</cite>
       </blockquote>
     </section>
@@ -210,7 +194,7 @@
         <h2>Vos <em>questions</em></h2>
       </header>
       <div class="faq-list reveal">
-        <details><summary>Comment passer commande ?</summary><p>Ajoutez le sac et le coloris de votre choix au panier, puis laissez votre nom, votre téléphone et votre adresse. Aucun compte à créer. Nous vous appelons pour confirmer la commande avant la livraison. Vous pouvez aussi commander directement par message WhatsApp depuis chaque fiche produit.</p></details>
+        <details><summary>Comment passer commande ?</summary><p>Ajoutez le sac et le coloris de votre choix au panier, puis laissez votre nom, votre téléphone et votre adresse. Aucun compte à créer. Nous vous appelons pour confirmer la commande avant la livraison.</p></details>
         <details><summary>Quels sont les moyens de paiement ?</summary><p>Le paiement se fait à la livraison, à la réception de votre commande. Rien n'est à payer en ligne.</p></details>
         <details><summary>Quels sont les délais et frais de livraison ?</summary><p>À Abidjan : 1 500 F pour Abatta, Bingerville, Faya, Angré et Cocody ; 2 000 F pour Koumassi, Port-Bouët, Yopougon, Abobo, Marcory et Treichville. Les expéditions hors d'Abidjan sont possibles : les frais vous sont confirmés par téléphone. Nous vous appelons aussi pour confirmer le délai.</p></details>
         <details><summary>Les couleurs sont-elles fidèles aux photos ?</summary><p>Nous photographions chaque coloris avec soin. De légères différences peuvent exister selon l'écran. En cas de doute, écrivez-nous : nous vous répondons rapidement.</p></details>
@@ -273,7 +257,8 @@
         <p class="form-msg" role="status"></p>
       </form>
     </div>
-    <p class="giant" aria-hidden="true">GLORY HOME</p>
+    <p class="giant" aria-hidden="true">Glory Home</p>
+    <p class="slogan">Chic, girly, glorieuse.</p>
     <p class="copy">© <span id="year"></span> Glory Home — Tous droits réservés</p>
   </footer>
 

@@ -4,7 +4,7 @@ window.fmt = (n) => Number(n).toLocaleString("fr-FR").replace(/[  ]/g, " ") +
 
 window.CATALOG = [
   {
-    id: "eclat", num: "N° 01", name: "Le sac <em class=\"name\">« Éclat »</em>", short: "Le sac « Éclat »", price: 20000,
+    id: "eclat", num: "N° 01", name: "Éclat", short: "Le sac « Éclat »", price: 20000,
     desc: "Un sac structuré à l'allure de grande maison. Sa finition vernie effet croco capte la lumière, ses deux anses rigides s'ornent d'embouts dorés et d'une breloque en trèfle. À la main ou en bandoulière, il accompagne du bureau à la soirée.",
     specs: [
       ["Matière", "Finition vernie effet croco, brillante"],
@@ -21,7 +21,7 @@ window.CATALOG = [
     ],
   },
   {
-    id: "t", num: "N° 02", name: "Le sac <em class=\"name\">« T »</em>", short: "Le sac « T »", price: 15000,
+    id: "t", num: "N° 02", name: "T", short: "Le sac « T »", price: 15000,
     desc: "Un sac à rabat à la ligne épurée, pensé pour durer et se marier à tout. Son fermoir en « T » argenté, véritable signature, ferme le rabat d'un seul geste. Souple et structuré à la fois, il épouse l'épaule avec élégance.",
     specs: [
       ["Matière", "Finition grainée, douce au toucher"],

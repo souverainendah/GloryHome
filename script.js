@@ -5,7 +5,7 @@ const WHATSAPP = window.GLORY.whatsapp;
 
 const $ = (s) => document.querySelector(s);
 const stageImg = $("#stageImg"), stageTag = $("#stageTag");
-const swatches = $("#swatches"), colorName = $("#colorName"), orderBtn = $("#order"), grid = $("#grid");
+const swatches = $("#swatches"), colorName = $("#colorName"), grid = $("#grid");
 const tabs = $("#tabs"), mNum = $("#mNum"), mName = $("#mName"), mPrice = $("#mPrice"), mDesc = $("#mDesc"), specs = $("#specs");
 let p = 0, c = 0;
 
@@ -13,7 +13,7 @@ const waLink = (text) => `https://wa.me/${WHATSAPP}${text ? "?text=" + encodeURI
 
 function renderModel() {
   const m = products[p];
-  mNum.textContent = `${m.num} · Nouvel arrivage`;
+  mNum.textContent = `${m.num} · Le sac`;
   mName.innerHTML = m.name;
   mPrice.textContent = fmt(m.price);
   mDesc.textContent = m.desc;
@@ -56,7 +56,6 @@ function select(pi, ci, scroll) {
   }, 220);
   stageTag.textContent = `${m.short} — ${col.name}`;
   colorName.textContent = col.name;
-  orderBtn.href = waLink(`Bonjour, je souhaite commander ${m.short} Glory Home, coloris ${col.name} (${fmt(m.price)}).`);
   swatches.querySelectorAll("button").forEach((b, k) => {
     b.setAttribute("aria-checked", k === c);
     b.classList.toggle("on", k === c);
@@ -130,64 +129,75 @@ document.querySelectorAll("[data-go]").forEach((a) => {
   });
 });
 
-// Bannière : les deux modèles défilent seuls, le sélecteur permet de choisir
-const hero = $("#hero"), slides = [...document.querySelectorAll(".slide")], sws = [...document.querySelectorAll(".sw")];
-const SLIDE_MS = 6000;
+// Bannière : deux vitrines côte à côte, on glisse de l'une à l'autre
+const track = $(".slides"), slides = [...document.querySelectorAll(".slide")], sws = [...document.querySelectorAll(".sw")];
+const prevBtn = $("#heroPrev"), nextBtn = $("#heroNext");
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-let cur = 0, timer = null;
-hero.style.setProperty("--dur", `${SLIDE_MS}ms`);
+let cur = 0, touched = false;
 
-function show(i) {
-  cur = (i + slides.length) % slides.length;
+function mark(i) {
+  cur = i;
   slides.forEach((s, k) => s.classList.toggle("is-active", k === cur));
-  sws.forEach((b, k) => {
-    b.classList.remove("is-active");
-    b.setAttribute("aria-selected", k === cur);
-  });
-  void sws[cur].offsetWidth; // relance la barre de progression
-  sws[cur].classList.add("is-active");
-  const next = slides[(cur + 1) % slides.length];
-  $("#hintName").textContent = next.querySelector(".name").textContent;
+  sws.forEach((b, k) => { b.classList.toggle("is-active", k === cur); b.setAttribute("aria-selected", k === cur); });
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === slides.length - 1;
 }
-function play() {
-  clearInterval(timer);
-  if (reduced) return;
-  hero.classList.remove("paused");
-  timer = setInterval(() => show(cur + 1), SLIDE_MS);
-}
-function stop() { clearInterval(timer); hero.classList.add("paused"); }
-sws.forEach((b) => b.addEventListener("click", () => { show(+b.dataset.i); play(); }));
-hero.addEventListener("pointerenter", () => { if (matchMedia("(hover: hover)").matches) stop(); });
-hero.addEventListener("pointerleave", () => { if (matchMedia("(hover: hover)").matches) { show(cur); play(); } });
-const go = (d) => { show(cur + d); play(); };
-$("#heroPrev").addEventListener("click", () => go(-1));
-$("#heroNext").addEventListener("click", () => go(1));
-$("#hint").addEventListener("click", () => go(1));
-// Glisser (doigt ou souris) pour changer de modèle
-let x0 = null;
-hero.addEventListener("pointerdown", (e) => { x0 = e.clientX; });
-hero.addEventListener("pointerup", (e) => {
-  if (x0 === null) return;
-  const dx = e.clientX - x0;
-  x0 = null;
-  if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+const goTo = (i) => {
+  touched = true;
+  const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
+  track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduced ? "auto" : "smooth" });
+};
+// La vitrine active est celle dont le centre est le plus proche du centre de la bannière
+track.addEventListener("scroll", () => {
+  const mid = track.scrollLeft + track.clientWidth / 2;
+  const i = slides.reduce((best, s, k) => (Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid) < Math.abs(slides[best].offsetLeft + slides[best].offsetWidth / 2 - mid) ? k : best), 0);
+  if (i !== cur) mark(i);
+}, { passive: true });
+sws.forEach((b) => b.addEventListener("click", () => goTo(+b.dataset.i)));
+prevBtn.addEventListener("click", () => goTo(cur - 1));
+nextBtn.addEventListener("click", () => goTo(cur + 1));
+addEventListener("keydown", (e) => {
+  if (e.target.closest("input, textarea, select")) return;
+  if (e.key === "ArrowRight" && scrollY < innerHeight / 2) goTo(cur + 1);
+  if (e.key === "ArrowLeft" && scrollY < innerHeight / 2) goTo(cur - 1);
 });
-hero.addEventListener("pointercancel", () => { x0 = null; });
-document.addEventListener("visibilitychange", () => (document.hidden ? stop() : (show(cur), play())));
-show(0);
-play();
 
-// Poussière de lumière dans l'arrière-plan
-const motes = $("#motes");
+// Souris : on attrape la scène et on la tire, comme au doigt
+let drag = null;
+track.addEventListener("pointerdown", (e) => {
+  if (e.pointerType !== "mouse" || e.button !== 0 || e.target.closest("a, button")) return;
+  drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+});
+addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x;
+  if (!drag.moved && Math.abs(dx) < 6) return;
+  drag.moved = true;
+  touched = true;
+  track.classList.add("dragging");
+  track.scrollLeft = drag.left - dx;
+});
+addEventListener("pointerup", () => {
+  if (!drag) return;
+  const moved = drag.moved, dx = track.scrollLeft - drag.left;
+  drag = null;
+  track.classList.remove("dragging");
+  if (moved) goTo(Math.abs(dx) > 60 ? cur + (dx > 0 ? 1 : -1) : cur);
+});
+
+// Au chargement, la scène glisse un peu vers la gauche puis revient : on comprend qu'il y en a une autre
 if (!reduced) {
-  for (let i = 0; i < 16; i++) {
-    const m = document.createElement("span");
-    const s = 3 + Math.random() * 5;
-    m.className = "mote";
-    m.style.cssText = `left:${Math.random() * 100}%;width:${s}px;height:${s}px;animation-duration:${9 + Math.random() * 12}s;animation-delay:${-Math.random() * 18}s`;
-    motes.append(m);
-  }
+  setTimeout(() => {
+    if (touched || track.scrollLeft > 4) return;
+    track.style.scrollSnapType = "none";
+    track.scrollTo({ left: 90, behavior: "smooth" });
+    setTimeout(() => {
+      track.scrollTo({ left: 0, behavior: "smooth" });
+      setTimeout(() => { track.style.scrollSnapType = ""; }, 700);
+    }, 900);
+  }, 1600);
 }
+mark(0);
 
 // Menu mobile
 const burger = $("#burger"), nav = $("#nav");

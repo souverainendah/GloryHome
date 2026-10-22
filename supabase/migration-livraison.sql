@@ -1,5 +1,7 @@
 -- Mise à jour pour les frais de livraison par commune.
 -- À exécuter UNE fois dans le SQL Editor de Supabase si le script principal a déjà été exécuté.
+-- ATTENTION : si vous avez exécuté la version actuelle de schema.sql, NE PAS exécuter ce fichier :
+-- il remplacerait create_order() par une ancienne version sans les protections anti-abus.
 
 -- Frais de livraison par commune
 create table if not exists delivery_zones (

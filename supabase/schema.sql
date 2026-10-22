@@ -91,8 +91,26 @@ begin
     raise exception 'Numéro de téléphone invalide.';
   end if;
   if v_pay <> 'livraison' then raise exception 'Mode de paiement invalide.'; end if;
+  if coalesce(trim(c->>'email'), '') <> '' and trim(c->>'email') !~* '^[^@\s]+@[^@\s]+\.[^@\s]+$' then
+    raise exception 'Adresse email invalide.';
+  end if;
   if jsonb_typeof(payload->'items') <> 'array' or jsonb_array_length(payload->'items') not between 1 and 10 then
     raise exception 'Panier invalide.';
+  end if;
+  -- Quantités : entiers de 1 à 2 chiffres, 20 articles maximum par commande
+  if exists (select 1 from jsonb_array_elements(payload->'items') e where coalesce(e->>'q', '') !~ '^\d{1,2}$') then
+    raise exception 'Quantité invalide.';
+  end if;
+  if (select sum((e->>'q')::int) from jsonb_array_elements(payload->'items') e) > 20 then
+    raise exception 'Maximum 20 articles par commande. Contactez-nous pour une commande plus importante.';
+  end if;
+  -- Anti-abus : un robot ne doit pas pouvoir vider le stock avec de fausses commandes
+  if (select count(*) from orders where created_at > now() - interval '1 hour'
+        and right(regexp_replace(phone, '\D', '', 'g'), 8) = right(regexp_replace(c->>'phone', '\D', '', 'g'), 8)) >= 3 then
+    raise exception 'Trop de commandes avec ce numéro. Contactez-nous directement.';
+  end if;
+  if (select count(*) from orders where created_at > now() - interval '10 minutes') >= 40 then
+    raise exception 'Le service est très sollicité, réessayez dans quelques minutes.';
   end if;
 
   if v_zone = 'expedition' then
@@ -173,6 +191,23 @@ end $$;
 drop trigger if exists orders_restock on orders;
 create trigger orders_restock after update of status on orders for each row execute function restock_on_cancel();
 
+-- Anti-spam : limite globale des inscriptions et des messages (les formulaires sont publics)
+create or replace function throttle_public_insert() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if tg_table_name = 'messages' and (select count(*) from messages where created_at > now() - interval '10 minutes') >= 30 then
+    raise exception 'Trop de demandes, réessayez dans quelques minutes.';
+  end if;
+  if tg_table_name = 'subscribers' and (select count(*) from subscribers where created_at > now() - interval '10 minutes') >= 60 then
+    raise exception 'Trop de demandes, réessayez dans quelques minutes.';
+  end if;
+  return new;
+end $$;
+drop trigger if exists messages_throttle on messages;
+create trigger messages_throttle before insert on messages for each row execute function throttle_public_insert();
+drop trigger if exists subscribers_throttle on subscribers;
+create trigger subscribers_throttle before insert on subscribers for each row execute function throttle_public_insert();
+
 -- Sécurité (RLS)
 alter table products enable row level security;
 alter table variants enable row level security;
@@ -194,6 +229,15 @@ create policy subscribers_admin_read on subscribers for select using (is_admin()
 create policy messages_insert on messages for insert with check (true);
 create policy messages_admin_read on messages for select using (is_admin());
 create policy admins_self on admins for select using (user_id = auth.uid());
+
+-- Droits minimaux (en plus de la RLS) : le public ne peut rien lire ni modifier d'autre que ci-dessous
+revoke all on products, variants, orders, order_items, subscribers, messages, admins, delivery_zones from anon, authenticated;
+grant select on products, variants, delivery_zones to anon, authenticated;
+grant insert on subscribers, messages to anon, authenticated;
+grant insert, update, delete on products, variants, delivery_zones to authenticated;
+grant select, update on orders to authenticated;
+grant select on order_items, subscribers, messages, admins to authenticated;
+revoke all on function throttle_public_insert() from public;
 
 revoke all on function create_order(jsonb), track_order(text, text) from public;
 grant execute on function create_order(jsonb), track_order(text, text) to anon, authenticated;

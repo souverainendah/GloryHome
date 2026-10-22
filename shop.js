@@ -7,7 +7,9 @@
 
   const find = (id) => CAT.find((p) => p.id === id);
   const colorOf = (id, name) => find(id).colors.find((c) => c.name === name);
-  let cart = Api.read("gh_cart", []).filter((l) => find(l.p) && colorOf(l.p, l.c));
+  let cart = Api.read("gh_cart", [])
+    .filter((l) => l && find(l.p) && colorOf(l.p, l.c))
+    .map((l) => ({ p: l.p, c: l.c, q: Math.max(1, Math.min(MAX_QTY, parseInt(l.q, 10) || 1)) }));
   let stock = null;           // { produit: { coloris: n } } si Supabase est configuré
   let sending = false;
 
@@ -41,7 +43,7 @@
     if (next <= have) { toast(room <= have ? "Stock insuffisant pour ce coloris." : `Maximum ${MAX_QTY} exemplaires par article.`); return; }
     if (line) line.q = next; else cart.push({ p, c, q: next });
     save();
-    toast(`${find(p).short} (${c}) ajouté au panier`);
+    openCart(); // le panier s'ouvre aussitôt : un seul clic de plus pour commander
   }
   function setQty(i, q) {
     const l = cart[i];

@@ -7,7 +7,11 @@
   const STATUS = { nouvelle: "Nouvelle", confirmee: "Confirmée", preparation: "En préparation", expediee: "Expédiée", livree: "Livrée", annulee: "Annulée" };
   const PAY = Object.fromEntries(G.payments.map((p) => [p.id, p.label]));
   const SKEY = "gh_admin_session";
-  let session = Api.read(SKEY, null);
+  const store = {
+    get: () => { try { return JSON.parse(sessionStorage.getItem(SKEY)); } catch { return null; } },
+    set: (v) => { try { v ? sessionStorage.setItem(SKEY, JSON.stringify(v)) : sessionStorage.removeItem(SKEY); } catch { /* stockage indisponible */ } },
+  };
+  let session = store.get();
   let orders = [], products = [], variants = [], msgs = [], subs = [];
 
   const call = (path, opt = {}) => Api.rest(path, { ...opt, token: session && session.access_token });
@@ -24,7 +28,7 @@
       const j = await r.json();
       if (!r.ok) throw new Error("Email ou mot de passe incorrect.");
       session = { access_token: j.access_token, expires_at: Date.now() + j.expires_in * 1000 };
-      Api.write(SKEY, session);
+      store.set(session);
       $("#pwd").value = "";
       start();
     } catch (e) {
@@ -117,7 +121,7 @@
 
   function exportCsv() {
     const head = ["Numéro", "Date", "Statut", "Nom", "Téléphone", "Ville", "Adresse", "Articles", "Total", "Paiement"];
-    const cell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+    const cell = (v) => { const t = String(v ?? ""); return `"${(/^[=+\-@\t\r]/.test(t) ? "'" + t : t).replace(/"/g, '""')}"`; };
     const lines = orders.map((o) => [o.number, o.created_at, STATUS[o.status], o.customer_name, o.phone, o.city, o.address,
       (o.items || []).map((i) => `${i.qty}x ${i.product_name} ${i.color}`).join(" | "), o.total, PAY[o.payment] || o.payment].map(cell).join(";"));
     const blob = new Blob(["﻿" + [head.map(cell).join(";"), ...lines].join("\r\n")], { type: "text/csv;charset=utf-8" });
@@ -139,13 +143,13 @@
     $("#statusFilter").innerHTML = `<option value="">Tous les statuts</option>` + Object.entries(STATUS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
     try { await refresh(); }
     catch (e) {
-      if (Api.live) { Api.write(SKEY, null); session = null; $("#app").hidden = true; $("#login").hidden = false; $("#loginErr").textContent = "Accès refusé ou session expirée. Reconnectez-vous avec un compte administrateur."; $("#loginErr").hidden = false; }
+      if (Api.live) { store.set(null); session = null; $("#app").hidden = true; $("#login").hidden = false; $("#loginErr").textContent = "Accès refusé ou session expirée. Reconnectez-vous avec un compte administrateur."; $("#loginErr").hidden = false; }
     }
   }
 
   $("#loginBtn").addEventListener("click", login);
   $("#pwd").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
-  $("#logout").addEventListener("click", () => { Api.write(SKEY, null); location.reload(); });
+  $("#logout").addEventListener("click", () => { store.set(null); location.reload(); });
   $("#q").addEventListener("input", renderOrders);
   $("#statusFilter").addEventListener("change", renderOrders);
   $("#csv").addEventListener("click", exportCsv);
