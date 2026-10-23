@@ -1,5 +1,21 @@
--- Glory Home : mise à jour de sécurité pour une base DÉJÀ installée.
+-- Glory Home : mise à jour pour une base DÉJÀ installée (livraison par commune + protections anti-abus).
 -- À exécuter UNE fois dans Supabase > SQL Editor. Ne supprime aucune donnée et peut être relancé sans risque.
+
+-- Frais de livraison par commune
+create table if not exists delivery_zones (
+  name text primary key,
+  fee integer not null check (fee >= 0),
+  sort integer not null default 0
+);
+insert into delivery_zones (name, fee, sort) values
+  ('Abatta', 1500, 1), ('Bingerville', 1500, 2), ('Faya', 1500, 3), ('Angré', 1500, 4), ('Cocody', 1500, 5),
+  ('Koumassi', 2000, 6), ('Port-Bouët', 2000, 7), ('Yopougon', 2000, 8), ('Abobo', 2000, 9), ('Marcory', 2000, 10), ('Treichville', 2000, 11)
+on conflict (name) do update set fee = excluded.fee, sort = excluded.sort;
+alter table delivery_zones enable row level security;
+drop policy if exists zones_read on delivery_zones;
+create policy zones_read on delivery_zones for select using (true);
+drop policy if exists zones_admin on delivery_zones;
+create policy zones_admin on delivery_zones for all using (is_admin()) with check (is_admin());
 
 -- Création d'une commande : prix, stock et frais de livraison vérifiés côté serveur
 create or replace function create_order(payload jsonb) returns jsonb
